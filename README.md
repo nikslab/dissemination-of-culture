@@ -6,4 +6,4 @@ Robert Axelrod of University of Michigan published in *The Journal of Conflict R
 
 ## Credits
 
-Using GIFEncoder Version 2.0 by László Zsidi, http://gifs.hu to creating animated gifs.
+Using GIFEncoder Version 2.0 by László Zsidi, http://gifs.hu for creating animated gifs.
