@@ -2,6 +2,9 @@
 
 include('GIFEncoder.class.php');
 
+/*
+ * Generates an x times y matrix of dna strings with $features features
+ */
 function randomAgents($x, $y, $features, $traits)
 {
     $agents = [];
@@ -20,7 +23,9 @@ function randomAgents($x, $y, $features, $traits)
     return $agents;
 }
 
-
+/*
+ * Calculates probability of interaction given two dna strings
+ */
 function interactionP($dna1, $dna2)
 {
     $dna1_split = str_split($dna1);
@@ -36,7 +41,10 @@ function interactionP($dna1, $dna2)
     return $result;
 }
 
-
+/*
+ * Makes two dna strings "interact" as per Axelrod.
+ * $dna1 will take one characteristic of $dns2 which is different
+ */
 function interact($dna1, $dna2)
 {
     // Find all that are different
@@ -71,6 +79,9 @@ function interact($dna1, $dna2)
  * Reporting
  */
 
+/*
+ * Whatever needs to be done in each reporting cycle
+ */
 function report($i, $agents)
 {
     $uniqs = count(uniqAgents($agents));
@@ -82,7 +93,9 @@ function report($i, $agents)
     createGif($i, $agents);
 }
 
-
+/*
+ * Calculates number of unique agents in the matrix
+ */
 function uniqAgents($agents)
 {
     $result = [];

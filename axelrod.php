@@ -3,17 +3,19 @@
 
 define("VOCAB", "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-$n = 25;
+// Config
+$n = 15;
 $x = $n;
 $y = $n;
-$features = 6;
-$traits = 3;
+$features = 10;
+$traits = 5;
 define("ALLELES", substr(VOCAB, 0, $traits));
+$reach = 5;
 $iterations = $n * 10000;
 $report = $n*$n;
 
 $pid = getmypid();
-$title = $n . "px_" . $features . "Fx" . $traits . "T_" . $pid . ".gif";
+$title = $n . "px_" . $features . "Fx" . $traits . "T_" . "_" . $reach . "_" . $pid . ".gif";
 
 require_once("functions.php");
 
@@ -37,8 +39,8 @@ while (!$stop) {
            && !(($neighbourX == $pickX) && ($neighbourY == $pickY))
           )
     {
-        $neighbourX = $pickX + (rand(0,2) - 1);
-        $neighbourY = $pickY + (rand(0,2) - 1);
+        $neighbourX = $pickX + (rand(0, $reach) - 1);
+        $neighbourY = $pickY + (rand(0, $reach) - 1);
     }
     $prob = interactionP($agents[$pickX][$pickY], $agents[$neighbourX][$neighbourY]);
     $roll = rand(0,100) / 100;
