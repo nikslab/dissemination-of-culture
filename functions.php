@@ -91,7 +91,7 @@ function interactAxelrod($dna1, $dna2)
 /*
  * Whatever needs to be done in each reporting cycle
  */
-function report($i, $agents)
+function report($config, $i, $agents)
 {
     $uniqs = count(uniqAgents($agents));
     $flat = [];
@@ -99,8 +99,15 @@ function report($i, $agents)
     $total = count($flat);
     $percent = round((1 - ($uniqs / $total)) * 100, 0);
     print "==== $i: $uniqs ($percent% same)\n";
+
     $pid = getmypid();
-    createGif("img/" . $pid, 300, $i, $agents);
+    if ($config['gif'] == 'yes') {
+        createGif("img/" . $pid, 300, $i, $agents);
+    }
+
+    if ($config['save'] == 'yes') {
+        saveAgents('dat/' . $config['filename'], $i, $agents);
+    }
 }
 
 

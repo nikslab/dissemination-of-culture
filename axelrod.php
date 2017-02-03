@@ -37,7 +37,12 @@ $iterations = $n * 10000;
 $report = $n*$n*$report; // After each one has had a chance to act
 
 $pid = getmypid();
-$title = $n . "px_" . $features . "Fx" . $traits . "T_" . $reach . "_" . $pid;
+$name = "";
+if (isset($config['name'])) {
+    $name = $config['name'] . "_";
+}
+$title = $name . $n . "px_" . $features . "Fx" . $traits . "T_" . $reach . "_" . $pid;
+$config['filename'] = $title;
 
 require_once("functions.php");
 require_once("visualization.php");
@@ -100,10 +105,7 @@ while (!$stop) {
     }
 
     if (($i % $report) == 0) {
-        report($i, $agents);
-        if ($save) {
-            saveAgents("dat/" . $title . ".db", $i, $agents);
-        }
+        report($config, $i, $agents);
     }
 
     if (($i % $iterations) == 0) {
