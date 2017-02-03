@@ -1,5 +1,13 @@
 <?php
-
+/*******************************************************************************
+ * functions.php
+ *
+ * Various helper functions for
+ * https://github.com/nikslab/dissemination-of-culture
+ *
+ * By Nik Stankovic, Jan 2017
+ *
+ ******************************************************************************/
 
 /*
  * Generates an x times y matrix of dna strings with $features length

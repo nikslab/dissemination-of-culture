@@ -1,12 +1,20 @@
 #!/usr/bin/php
 <?php
+/*******************************************************************************
+ * axelrod.php
+ *
+ * See https://github.com/nikslab/dissemination-of-culture/blob/master/README.md
+ *
+ * By Nik Stankovic, Jan 2017
+ *
+ ******************************************************************************/
 
 define("VOCAB", "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 
-/*
- * Read config file
- */
+//
+// Read config file
+//
 $config_file = "";
 if (isset($argv[1])) {
     $config_file = $argv[1];
@@ -19,9 +27,9 @@ if (file_exists($config_file)) {
     exit(0);
 }
 
-/*
- * Parse config file
- */
+//
+// Parse config file
+//
 $n = $config['matrix_size'];
 $x = $n;
 $y = $n;
@@ -52,7 +60,9 @@ $config['filename'] = $title;
 require_once("include/functions.php");
 require_once("include/visualization.php");
 
+//
 // Generate initial matrix
+//
 $agents = agentsRandom($x, $y, $features, $traits);
 $c = count($agents);
 if ($c > 0) {
@@ -67,7 +77,9 @@ $stop = false;
 $count_no_change = 0;
 $last_uniqs = -1;
 
+//
 // Iterate
+//
 while (!$stop) {
 
     $i++;

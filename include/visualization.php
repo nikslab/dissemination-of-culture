@@ -1,8 +1,18 @@
 <?php
-
-/**************************
- * 2D Visualization
- **************************/
+/*******************************************************************************
+ * visualization.php
+ *
+ * Creates GIFs and animated GIFs from two dimensional array matrix
+ *
+ * Created for use in https://github.com/nikslab/dissemination-of-culture
+ * but can be easily adapted for other applications where you need to
+ * visualize an array.
+ *
+ * TODO: Make it a class
+ *
+ * By Nik Stankovic, Jan 2017
+ *
+ ******************************************************************************/
 
 include('GIFEncoder.class.php'); // for animated GIFs
 
