@@ -2,7 +2,7 @@
 
 By Nik Stankovic, Jan 2017
 
-Code for implemetation, visualization and further exploration of experiments in the paper titled **The Dissemination of Culture** by Robert Axelrod (University of Michigan) published in *The Journal of Conflict Resolution* in 1997.
+Implementation, visualization and further exploration of experiments in the paper titled **The Dissemination of Culture** by Robert Axelrod (University of Michigan) published in *The Journal of Conflict Resolution* in 1997.
 (full paper: http://www-personal.umich.edu/~axe/research/Dissemination.pdf).
 
 ## Credits
