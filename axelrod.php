@@ -3,7 +3,10 @@
 
 define("VOCAB", "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-// Read config file
+
+/*
+ * Read config file
+ */
 $config_file = "";
 if (isset($argv[1])) {
     $config_file = $argv[1];
@@ -16,26 +19,28 @@ if (file_exists($config_file)) {
     exit(0);
 }
 
-// Config
+/*
+ * Parse config file
+ */
 $n = $config['matrix_size'];
 $x = $n;
 $y = $n;
 $features = $config['features'];
 $traits = $config['traits'];
-$mutation_rate = $config['mutation'];
 $gif_delay = $config['gif_delay'];
 $report = $config['report'];
 $save = false;
 if ($config['save'] == 'yes') {
     $save = true;
 }
-define("ALLELES", substr(VOCAB, 0, $traits));
+define("ALLELES", substr(VOCAB, 0, $traits)); // subset of VOCAB!
 
 $reach = $config['reach'];
 
 $iterations = $n * 10000;
 $report = $n*$n*$report; // After each one has had a chance to act
 
+// Filename for data files and visualization
 $pid = getmypid();
 $name = "";
 if (isset($config['name'])) {
@@ -44,11 +49,11 @@ if (isset($config['name'])) {
 $title = $name . $n . "px_" . $features . "Fx" . $traits . "T_" . $reach . "_" . $pid;
 $config['filename'] = $title;
 
-require_once("functions.php");
-require_once("visualization.php");
+require_once("include/functions.php");
+require_once("include/visualization.php");
 
 // Generate initial matrix
-$agents = randomAgents($x, $y, $features, $traits);
+$agents = agentsRandom($x, $y, $features, $traits);
 $c = count($agents);
 if ($c > 0) {
     print 'Generated agents in ' . $x . 'x' . $y . "matrix.\n";
@@ -62,7 +67,7 @@ $stop = false;
 $count_no_change = 0;
 $last_uniqs = -1;
 
-// Main loop
+// Iterate
 while (!$stop) {
 
     $i++;
@@ -91,17 +96,26 @@ while (!$stop) {
     }
 
     // Mutation
-    $roll = rand(0,100) / 100;
-    if ($roll < $mutation_rate) {
-        $new_allele = rand(0, count(ALLELES)-1);
-        $pick_gene = rand(0, strlen($agents[$pickX][$pickY])-1);
-        $dna_split = str_split($agents[$pickX][$pickY]); // split into characters
-        $dna_split[$pick_gene] = $new_allele;
-        $new_dna = "";
-        foreach ($dna_split as $d) {
-            $new_dna .= $d;
+    if (isset($config['mutation_rate'])) {
+        $roll = rand(0,100) / 100;
+        if ($roll < $config['mutation_rate']) {
+
+            // Generate mutation
+            $new_allele = rand(0, count(ALLELES)-1);
+            $pick_gene = rand(0, strlen($agents[$pickX][$pickY])-1);
+
+            // Splice and insert mutation
+            $dna_split = str_split($agents[$pickX][$pickY]); // split into characters
+            $dna_split[$pick_gene] = $new_allele;
+
+            // Roll it back into string
+            $new_dna = "";
+            foreach ($dna_split as $d) {
+                $new_dna .= $d;
+            }
+            $agents[$pickX][$pickY] = $new_dna;
+
         }
-        $agents[$pickX][$pickY] = $new_dna;
     }
 
     if (($i % $report) == 0) {
@@ -117,7 +131,7 @@ while (!$stop) {
 
     $uniqs = count(uniqAgents($agents));
     if ($uniqs < 2) {
-        report($i, $agents);
+        report($config, $i, $agents);
         $stop = true;
     }
     if ($last_uniqs == $uniqs) {
@@ -133,10 +147,10 @@ while (!$stop) {
 
 }
 
-createAnimatedGif("img/" . $pid, "animated/" . $title . ".gif", $gif_delay);
+if ($config['gif'] == 'yes') {
+    createAnimatedGif("img/" . $pid, "animated/" . $title . ".gif", $gif_delay);
+}
 
-// Delete source files
-
-print "\nDone...\n";
+print "\nDone.\n\n";
 
 ?>

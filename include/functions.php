@@ -4,7 +4,7 @@
 /*
  * Generates an x times y matrix of dna strings with $features length
  */
-function randomAgents($x, $y, $features, $traits)
+function agentsRandom($x, $y, $features, $traits)
 {
     $agents = [];
 
