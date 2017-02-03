@@ -1,7 +1,7 @@
 <?php
 
 /**************************
- * Visualization
+ * 2D Visualization
  **************************/
 
 include('GIFEncoder.class.php'); // for animated GIFs
@@ -72,18 +72,26 @@ function dna2rgb($dna)
 
 
 /*
- * Create a square GIF of roughly 300 pixels wide x long from the $agents matrix
- * Using GD library
+ * Create a square GIF of roughly $size pixels wide and long from the
+ * $agents two dimensional array.  $i is the order (generation).
+ * Filename will be $target_dir/$pid_$i.gif
+ * Target dir will be created if it doesn't exist.
+ * No error checking on creating target dir!
+ * Uses GD library.
  */
-function createGif($i, $agents)
+function createGif($target_dir, $size, $i, $agents)
 {
-    $img_size = 300; // pixels, rough
     $pid = getmypid();
     $in = str_pad($i, 12, '0', STR_PAD_LEFT);
-    $filename = "img/$pid-$in.gif";
+    $filename = "$target_dir/$pid-$in.gif";
+
+    // Make sure target dir exists, if not create it
+    if (!file_exists($target_dir) && !is_dir($target_dir)) {
+        mkdir($target_dir);
+    }
 
     $agents_size = count($agents);
-    $pixel_size = floor($img_size / $agents_size);
+    $pixel_size = floor($size / $agents_size);
     $img_real_size = $pixel_size * $agents_size;
 
     $gd = imagecreatetruecolor($img_real_size, $img_real_size);
@@ -107,17 +115,17 @@ function createGif($i, $agents)
 
 
 /*
- * Generates an animated GIF from a number of snapshots
+ * Generates an animated GIF ($target) from a number of frames in $source_dir
+ * Delay is in ms.
+ * No error checking on frames.  If something fails, your problem.
  */
-function createAnimatedGif($dir, $title, $delay)
+function createAnimatedGif($source_dir, $target, $delay)
 {
-    $pid = getmypid();
-    $filename = $dir . $title;
     $frames = [];
-    $framed = [];
+    $framed = []; // holding delays between frames
 
-    // Get a list of files for our PID
-    $mask = "img/$pid-*.gif";
+    // Get a list of files
+    $mask = "$source_dir/*.gif";
     $file_list = glob($mask);
 
     // Load frames from disk
@@ -128,14 +136,13 @@ function createAnimatedGif($dir, $title, $delay)
         $frames[] = ob_get_contents();
         ob_end_clean();
         $framed[] = $delay;
-        unlink($frame_file);
     }
 
-    // Created animated GIF
+    // Generate animated GIF
     $gif = new GIFEncoder($frames, $framed, 1, 1, 0, 0, 0, 'bin');
 
     // Save to file
-    $fp = fopen($filename, 'w');
+    $fp = fopen($target, 'w');
     fwrite($fp, $gif->GetAnimation());
     fclose($fp);
 }

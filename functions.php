@@ -24,7 +24,8 @@ function randomAgents($x, $y, $features, $traits)
 
 
 /*
- * Calculates probability of interaction given two dna strings
+ * Calculates probability of interaction given two dna strings.
+ * Probability is equal to the percent of "genes" that are the same.
  */
 function interactionP($dna1, $dna2)
 {
@@ -48,9 +49,9 @@ function interactionP($dna1, $dna2)
 
 /*
  * Makes two dna strings "interact" as per Axelrod.
- * $dna1 will take one characteristic of $dns2 which is different
+ * $dna1 will take on one characteristic of $dns2 which is different
  */
-function interact($dna1, $dna2)
+function interactAxelrod($dna1, $dna2)
 {
     // Find all that are different
     $dna1_split = str_split($dna1); // split into characters
@@ -98,7 +99,24 @@ function report($i, $agents)
     $total = count($flat);
     $percent = round((1 - ($uniqs / $total)) * 100, 0);
     print "==== $i: $uniqs ($percent% same)\n";
-    createGif($i, $agents);
+    $pid = getmypid();
+    createGif("img/" . $pid, 300, $i, $agents);
+}
+
+
+/*
+ * Saves the agents array.
+ * Agents are saved in a three dimensional array.
+ * The first dimension becomes the iteration ($i).
+ */
+function saveAgents($target_file, $i, $agents)
+{
+    $db = [];
+    if (file_exists($target_file)) {
+        $db = unserialize(file_get_contents($target_file));
+    }
+    $db["$i"] = $agents;
+    file_put_contents($target_file, serialize($db));
 }
 
 

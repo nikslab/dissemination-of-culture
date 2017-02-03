@@ -24,17 +24,20 @@ $features = $config['features'];
 $traits = $config['traits'];
 $mutation_rate = $config['mutation'];
 $gif_delay = $config['gif_delay'];
-$frames = $config['frames'];
-
+$report = $config['report'];
+$save = false;
+if ($config['save'] == 'yes') {
+    $save = true;
+}
 define("ALLELES", substr(VOCAB, 0, $traits));
 
 $reach = $config['reach'];
 
 $iterations = $n * 10000;
-$report = $n*$n*$frames;
+$report = $n*$n*$report; // After each one has had a chance to act
 
 $pid = getmypid();
-$title = $n . "px_" . $features . "Fx" . $traits . "T_" . $reach . "_" . $pid . ".gif";
+$title = $n . "px_" . $features . "Fx" . $traits . "T_" . $reach . "_" . $pid;
 
 require_once("functions.php");
 require_once("visualization.php");
@@ -79,7 +82,7 @@ while (!$stop) {
     $prob = interactionP($agents[$pickX][$pickY], $agents[$neighbourX][$neighbourY]);
     $roll = rand(0,100) / 100;
     if ($roll < $prob) {
-        $agents[$pickX][$pickY] = interact($agents[$pickX][$pickY], $agents[$neighbourX][$neighbourY]);
+        $agents[$pickX][$pickY] = interactAxelrod($agents[$pickX][$pickY], $agents[$neighbourX][$neighbourY]);
     }
 
     // Mutation
@@ -98,10 +101,13 @@ while (!$stop) {
 
     if (($i % $report) == 0) {
         report($i, $agents);
+        if ($save) {
+            saveAgents("dat/" . $title . ".db", $i, $agents);
+        }
     }
 
     if (($i % $iterations) == 0) {
-        $answer = readline("Continue?  Type 'no' to stop: ");
+        $answer = readline("Continue?  Type 'no' to stop, Enter to continue: ");
         if ($answer == "no") {
             $stop = true;
         }
@@ -125,7 +131,10 @@ while (!$stop) {
 
 }
 
-createAnimatedGif("animated/", $title, $gif_delay);
+createAnimatedGif("img/" . $pid, "animated/" . $title . ".gif", $gif_delay);
+
+// Delete source files
+
 print "\nDone...\n";
 
 ?>
