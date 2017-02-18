@@ -7,4 +7,4 @@ Implementation, visualization and further exploration of experiments in the pape
 
 ## Credits
 
-Using GIFEncoder Version 2.0 by László Zsidi, http://gifs.hu for creating animated gifs.
+Using GIFEncoder Version 2.0 by László Zsidi, http://gifs.hu to create animated gifs.
