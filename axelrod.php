@@ -11,7 +11,6 @@
 
 define("VOCAB", "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-
 //
 // Read config file
 //
@@ -22,6 +21,7 @@ if (isset($argv[1])) {
 if (file_exists($config_file)) {
     $config = json_decode(file_get_contents($config_file), true);
     var_dump($config);
+    print "\n";
 } else {
     print "Usage: ./axelrod.php <config>\nCan't find configuration.  Exiting...\n";
     exit(0);
@@ -33,10 +33,15 @@ if (file_exists($config_file)) {
 $n = $config['matrix_size'];
 $x = $n;
 $y = $n;
+$size = $n*$n;
 $features = $config['features'];
 $traits = $config['traits'];
 $gif_delay = $config['gif_delay'];
 $report = $config['report'];
+$max_iterations = false;
+if (isset($config['max_iterations'])) {
+    $max_iterations = $config['max_iterations'];
+}
 $save = false;
 if ($config['save'] == 'yes') {
     $save = true;
@@ -66,7 +71,7 @@ require_once("include/visualization.php");
 $agents = agentsRandom($x, $y, $features, $traits);
 $c = count($agents);
 if ($c > 0) {
-    print 'Generated agents in ' . $x . 'x' . $y . "matrix.\n";
+    print 'Generated agents in ' . $x . 'x' . $y . " matrix.\n";
 } else {
     print "Could not generate matrix, maybe something wrong with config file.\n";
     exit(0);
@@ -76,6 +81,8 @@ $i = 0;
 $stop = false;
 $count_no_change = 0;
 $last_uniqs = -1;
+
+report($config, $i, $agents);
 
 //
 // Iterate
@@ -130,15 +137,22 @@ while (!$stop) {
         }
     }
 
+    // Whether to report
     if (($i % $report) == 0) {
         report($config, $i, $agents);
     }
 
-    if (($i % $iterations) == 0) {
+    // If ran without max iterations ask whether to continue after a while
+    if ((($i % $iterations) == 0) && (!$max_iterations)) {
         $answer = readline("Continue?  Type 'no' to stop, Enter to continue: ");
         if ($answer == "no") {
             $stop = true;
         }
+    }
+    
+    // Quit if over max iterations
+    if ($max_iterations && ($max_iterations < ($i / $size))) {
+        $stop = true;
     }
 
     $uniqs = count(uniqAgents($agents));
@@ -153,11 +167,15 @@ while (!$stop) {
     }
     $last_uniqs = $uniqs;
 
+    // Exit if nothing is happening
     if ($count_no_change > 100000) {
         $stop = true;
     }
 
 }
+
+// Final report
+report($config, $i, $agents);
 
 if ($config['gif'] == 'yes') {
     createAnimatedGif("img/" . $pid, "animated/" . $title . ".gif", $gif_delay);

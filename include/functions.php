@@ -57,7 +57,7 @@ function interactionP($dna1, $dna2)
 
 /*
  * Makes two dna strings "interact" as per Axelrod.
- * $dna1 will take on one characteristic of $dns2 which is different
+ * $dna1 will take on one characteristic of $dna2 which is different
  */
 function interactAxelrod($dna1, $dna2)
 {
@@ -101,12 +101,45 @@ function interactAxelrod($dna1, $dna2)
  */
 function report($config, $i, $agents)
 {
+
+    // Figure out top three agents
+    $ag = [];
+    array_walk_recursive($agents, function($a) use (&$ag) { $ag[] = $a; });
+    $c = [];
+    $total = 0;
+    foreach ($ag as $n=>$dna) {
+        if (isset($c[$dna])) {
+            $c[$dna]++;
+        } else {
+            $c[$dna] = 1;
+        }
+        $total++;
+    }
+    arsort($c);
+    $k = 1;
+    foreach ($c as $dna=>$n) {
+        $o[$k] = $dna;
+        $oc[$k] = round(($n / $total) * 100, 1);
+        $k++;
+        if ($k > 3) {
+            break;
+        }
+    }
+    $first = $o[1]; $first_percent = $oc[1];
+    $second = ''; $second_percent = 0;
+    $third = ''; $third_percent = 0;
+    $top = $first_percent;
+    if (isset($o[2])) { $second = $o[2]; $second_percent = $oc[2]; $top += $second_percent; }
+    if (isset($o[3])) { $third = $o[3]; $third_percent = $oc[3]; $top += $third_percent; }
+
     $uniqs = count(uniqAgents($agents));
     $flat = [];
     array_walk_recursive($agents,function($v, $k) use (&$flat){ $flat[] = $v; });
     $total = count($flat);
     $percent = round((1 - ($uniqs / $total)) * 100, 0);
-    print "==== $i: $uniqs ($percent% same)\n";
+    $size = $config['matrix_size']*$config['matrix_size'];
+    $generation = round($i / $size, 0);
+    print "= $i (gen $generation): $uniqs uniq ($percent% same) $first|$second|$third = $top%\n";
 
     $pid = getmypid();
     if ($config['gif'] == 'yes') {
@@ -116,6 +149,16 @@ function report($config, $i, $agents)
     if ($config['save'] == 'yes') {
         saveAgents('dat/' . $config['filename'], $i, $agents);
     }
+
+    
+    // Log
+    $log_file = 'dat/log.txt';
+    $pid = getmypid();
+    $stamp = time();
+    $log_line = $stamp."|".$config['name']."|".$pid."|".$config['matrix_size']."|".
+                $config['features']."|".$config['traits']."|".$config['reach']."|".
+                $config['mutation_rate']."|"."$i|$generation|$uniqs|$percent|$top|$first|$first_percent|$second|$second_percent|$third|$third_percent\n";
+    file_put_contents($log_file, $log_line, FILE_APPEND);
 }
 
 
