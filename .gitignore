@@ -1,3 +1,4 @@
 .komodotools
 *.komodoproject
 test.php
+*.geany
