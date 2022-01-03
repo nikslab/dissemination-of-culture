@@ -1,7 +1,7 @@
 # dissemination-of-culture
 
-By Nik Stankovic, Jan 2017
-Revised by Nik Stankovic, Jan 2022
+* By Nik Stankovic, Jan 2017
+* Revised by Nik Stankovic, Jan 2022
 
 ![Animated](https://github.com/nikslab/dissemination-of-culture/blob/master/animated/15px_10Fx5T__1_9463.gif)
 
