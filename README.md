@@ -7,9 +7,9 @@ Revised by Nik Stankovic, Jan 2022
 
 Implementation, visualization and further exploration of experiments in the paper titled **The Dissemination of Culture** by Robert Axelrod (University of Michigan) published in *The Journal of Conflict Resolution* in 1997. (full paper: http://www-personal.umich.edu/~axe/research/Dissemination.pdf).
 
-# CONFIG
+# Config
 
-Configuration files are placed in config directory
+Configuration files are placed in `/config` directory
 
 `
 {
@@ -27,10 +27,15 @@ Configuration files are placed in config directory
 `
 
 name: label for experiment, also used in filenames
+
 matrix_size: in pixels, NxN
+
 features: number of features
+
 traits: number of traits
+
 reach: how far in pixels can you interact with someone
+
 mutation rate: probability that a pixel with mutate in each iteration, note it's not %, percent is probability * 100
 report: whether you want intermediate reports while running or not
 save> whether the data should be saved
@@ -40,7 +45,7 @@ gif_delay: how fast the gif should animate from one iteration to the next
 
 ## Requirements
 
-GD library for PHP, installed with e.g. on Linux `sudo apt-get install gf7.4-gd`
+GD library for PHP, e.g. on Linux installed with `sudo apt-get install php7.4-gd`
 
 ## Credits
 
