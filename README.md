@@ -11,7 +11,7 @@ Implementation, visualization and further exploration of experiments in the pape
 
 Configuration files are placed in `/config` directory
 
-`
+```
 {
     "name": "testing",
     "matrix_size": "20",
@@ -24,23 +24,18 @@ Configuration files are placed in `/config` directory
     "gif": "yes",
     "gif_delay": "20"
 }
-`
+```
 
-name: label for experiment, also used in filenames
-
-matrix_size: in pixels, NxN
-
-features: number of features
-
-traits: number of traits
-
-reach: how far in pixels can you interact with someone
-
-mutation rate: probability that a pixel with mutate in each iteration, note it's not %, percent is probability * 100
-report: whether you want intermediate reports while running or not
-save> whether the data should be saved
-gif: whether an animated gif should be generated
-gif_delay: how fast the gif should animate from one iteration to the next
+* **name**: label for experiment, also used in filenames
+* **matrix_size**: in pixels, NxN
+* **features**: number of features
+* **traits**: number of traits
+* **reach**: how far in pixels can you interact with someone
+* **mutation rate**: probability that a pixel with mutate in each iteration, note it's not %, percent is probability * 100
+* **report**: whether you want intermediate reports while running or not
+* **save**: whether the data should be saved
+* **gif**: whether an animated gif should be generated
+* **gif_delay**: how fast the gif should animate from one iteration to the next
 
 
 ## Requirements
