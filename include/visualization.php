@@ -28,8 +28,8 @@ function dna2dec($dna)
     $dec = 0;
     $power = 0;
     foreach ($digits as $d) {
-        $pos = strpos(ALLELES, $d) + 1;
-        $dec +=  $pos * ($max**$power);
+        $pos = strpos(ALLELES, $d);
+        $dec +=  $pos * (pow($max, $power));
         $power++;
     }
     return $dec;
@@ -42,7 +42,7 @@ function dna2dec($dna)
 function dec2rgb($color_num)
 {
     $R = 0;
-    $d = 255*255;
+    $d = 65025; // 255*255
     if ($color_num > $d) {
         $R = floor($color_num / $d);
         $color_num -= $R*$d;
@@ -55,7 +55,7 @@ function dec2rgb($color_num)
         $color_num -= $G*$d;
     }
 
-    $B = $color_num;
+    $B = floor($color_num);
 
     $result["R"] = $R;
     $result["G"] = $G;
@@ -70,12 +70,19 @@ function dec2rgb($color_num)
  */
 function dna2rgb($dna)
 {
-    $colors = 16777216; // 255*255*255
-    $options = (strlen(ALLELES) - 1)**strlen($dna);
-    $increment = $options / $colors;
+    $colors = 16581375; // 255*255*255
+    //$options = (strlen(ALLELES) - 1)**strlen($dna);
+    $options = (strlen(ALLELES))**strlen($dna);
+    $dec = dna2dec($dna);
+    $multiplier = $dec / $options;
+    $scale = $multiplier * $colors;
+    $RGB = dec2rgb($scale);
 
-    $color_num = floor(dna2dec($dna) / $increment);
-    $RGB = dec2rgb($color_num);
+    //$increment = $options / $colors;
+
+    //$color_num = floor(dna2dec($dna) / $increment);
+    //$RGB = dec2rgb($color_num);
+
 
     return $RGB;
 }

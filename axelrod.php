@@ -120,7 +120,7 @@ while (!$stop) {
         if ($roll < $config['mutation_rate']) {
 
             // Generate mutation
-            $new_allele = rand(0, count(ALLELES)-1);
+            $new_allele = rand(0, strlen(ALLELES)-1);
             $pick_gene = rand(0, strlen($agents[$pickX][$pickY])-1);
 
             // Splice and insert mutation

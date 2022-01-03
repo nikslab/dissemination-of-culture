@@ -147,7 +147,7 @@ function report($config, $i, $agents)
     }
 
     if ($config['save'] == 'yes') {
-        saveAgents('dat/' . $config['filename'], $i, $agents);
+        saveAgents('dat/' . $config['filename'] . ".dat", $i, $agents);
     }
 
     
